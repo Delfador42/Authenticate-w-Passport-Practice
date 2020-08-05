@@ -39,11 +39,12 @@ mongoose.connect("mongodb://localhost:27017/userDB", {
 mongoose.set("useCreateIndex",true);
 
 const userSchema = new mongoose.Schema({
-  email: String,
-  password: String,
-  googleId: String,
-  facebookId: String,
-  submitedUserSecret: String
+  email : { type: String, require: true, index:true, unique:true,sparse:true},
+  password: { type: String, require:true },
+  username: {type: String, sparse:true},
+  googleId: {type: String, sparse:true},
+  facebookId: {type: String, sparse:true},
+  submitedUserSecret: {type: String, sparse:true}
 });
 
 userSchema.plugin(passportLocalMongoose);
@@ -182,21 +183,21 @@ app.post('/submit', function(req,res){
 
 
 //post user registration information into a user database
-app.post("/register", function(req, res) {
+// app.post("/register", function(req, res) {
 
-User.register({username: req.body.username}, req.body.password, function(err, user){
-    if(err){
-      console.log(err);
-      res.redirect("/register");
-    }else{
-      //creates a cookie that that saves the user login session, and
-      //is deleted once the browser is exited ending the session
-      passport.authenticate("local")(req, res, function(){
-        res.redirect("/secrets");
-      });
-    }
-  });
-});
+// User.register({username: req.body.username}, req.body.password, function(err, user){
+//     if(err){
+//       console.log(err);
+//       res.redirect("/register");
+//     }else{
+//       //creates a cookie that that saves the user login session, and
+//       //is deleted once the browser is exited ending the session
+//       passport.authenticate("local")(req, res, function(){
+//         res.redirect("/secrets");
+//       });
+//     }
+//   });
+// });
 
 
 app.post("/login", function(req, res) {
